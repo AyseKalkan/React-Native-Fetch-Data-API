@@ -1,64 +1,76 @@
 import React, { useState } from 'react';
-import { Button, Linking, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, SectionList, StyleSheet, Text, View } from 'react-native';
 
 const App = () => {
-  const [result, setresult] = useState(0);
-  const [number, setnumber] = useState(5);
-  const [i, seti] = useState(0);
+  const [sections, setSections] = useState([
+    {
+      title: 'Title 1',
+      data: ['Item 1-1', 'Item 1-2'],
+    },
+  ]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const onClickHandler = () => {
-    setresult(result + number);
-    seti(i + 1);
+  const onRefresh = () => {
+    setRefreshing(true);
+    const newSection = {
+      title: 'Title ' + (sections.length + 1),
+      data: ['Item ' + (sections.length + 1) + '-1', 'Item ' + (sections.length + 1) + '-2'],
+    };
+    setSections([...sections, newSection]);
+    setRefreshing(false);
   };
 
   return (
-    <View style={styles.body}>
-      <Text style={styles.text}>Adım adım çarpma öğrenelim</Text>
-      <Text style={styles.text}>{result}</Text>
-
-      <Button title={`${number} Arttır`} onPress={onClickHandler}></Button>
-      <Text style={styles.text}>{i} kere tıkladınız</Text>
-      <Text style={styles.text}>Yani {number} x {i} = {result}</Text>
-      <Button
-        title="sıfırla"
-        onPress={() => {
-          setresult(0)
-          seti(0)
-        }}></Button>
-      <Button
-        title="Sayıyı arttır"
-        onPress={() => {
-          setnumber(number+1)
-          setresult(0)
-          seti(0)
-        }}
-      ></Button>
-      <Button
-        title="sayıyı azalt"
-        onPress={() => {
-          setnumber(number-1)
-          setresult(0)
-          seti(0)
-        }}
-      ></Button>
-    </View>
+    <SectionList
+      keyExtractor={(item, index) => index.toString()}
+      sections={sections}
+      renderItem={({ item }) => (
+        <View style={styles.item2}>
+          <Text style={styles.text_item}>{item}</Text>
+        </View>
+      )}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#4ae1fa']} />
+      }
+      renderSectionHeader={({ section }) => (
+        <View style={styles.item}>
+          <Text style={styles.text_header}>{section.title}</Text>
+        </View>
+      )}
+    />
   );
 };
 
 const styles = StyleSheet.create({
   body: {
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
+  },
+  item: {
+    flex: 2,
+    borderWidth: 2,
+    borderColor: '#000000',
+    backgroundColor: '#4ae1fa',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  item2: {
     flex: 1,
+    borderWidth: 2,
+    borderColor: '#000000',
     backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
+  text_header: {
     color: '#065275',
-    fontSize: 20,
+    fontSize: 50,
     fontStyle: 'italic',
     margin: 10,
   },
-  design: {
+  text_item: {
+    color: '#065275',
+    fontSize: 25,
     margin: 10,
   },
 });
