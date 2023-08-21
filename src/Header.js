@@ -13,7 +13,7 @@ const Header = (props) => {
             <Text
                 style={styles.text}
             >
-                Üyelik Girişi
+                React Native Tutorial
             </Text>
         </View>
     )
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     view: {
         width:'100%',
         height: 50,
-        backgroundColor: '#df7777',
+        backgroundColor: '#00f',
         justifyContent: 'center',
         alignItems: 'center',
     },
